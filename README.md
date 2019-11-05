@@ -65,7 +65,7 @@ It supports component lookup in a few ways:
 (defui button [{:keys [dispatch]} _ $]
   ($ :Button {:title "Fire missles" :onClick #(dispatch :fire-missles)}))
 
-(defui app [_ $]
+(defui app [_ _ $]
   ($ :View {:style #js {:flex 1}}
     ($ button)
     ($ :ImportedReactComponent)))
@@ -98,9 +98,9 @@ You can use the `component-provider` fn if you directly call [AppRegistry](https
 
 Alternatively if you don't have access to the `AppRegistry`, you can use the `boostrap` fn instead - which will return a valid React element
 
-## Context fns
+## Context transformers
 
-`component-provider` optionally takes in a context fn, which is applied each time the ctx map is passed to a component. It defaults to the `identity` function.
+`component-provider` optionally takes in a context fn, which is applied each time the context map is passed to a component. It defaults to the `identity` function.
 
 This can be incredibly useful for instrumentation, or for adding additional abstractions on top of the library (eg implementing your own data flow engine ala [domino](https://domino-clj.github.io/))
 
