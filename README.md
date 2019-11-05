@@ -47,7 +47,7 @@ Its signature looks like this:
 * The second (optional) argument are the component props.
 * The third (optional) vararg are any component children
 
-It supports lookup to components in a few ways:
+It supports component lookup in a few ways:
 
 * All keywords are mapped to their equivilant name in the [React Native API](https://facebook.github.io/react-native/docs/activityindicator), eg `:KeyboardAvoidingView`
 * Custom React Native components (eg, those imported from npm), can be extended via the `register-component` multimethod
@@ -59,7 +59,7 @@ It supports lookup to components in a few ways:
     [rehook.dom :as dom :refer-macros [defui]]
     ["imported-react-component" :refer [ImportedReactComponent]]))
 
-(dom/register-component :ImportedReactComponent [_]
+(defmethod dom/register-component :ImportedReactComponent [_]
   ImportedReactComponent)
 
 (defui button [{:keys [dispatch]} _ $]
@@ -75,7 +75,7 @@ Note how the `$` render fn hides having to pass the `context` map to its childre
 
 ### Props gotchas
 
-* Props passed to `$` are always covnerted to JS maps via `clj->js`. This fn isn't recursive, so remeber to use the `#js` literal on any nested maps!
+* Props passed to `$` are always converted to JS maps via `clj->js`. This fn isn't recursive, so remeber to use the `#js` literal on any nested maps!
 * `rehook` does no special transformation to the keys in your props, so use `onPress` over `on-press` etc.
 
 ## Initializing
@@ -100,8 +100,8 @@ Alternatively if you don't have access to the `AppRegistry`, you can use the `bo
 
 ## Context fns
 
-`component-provider` optionally takes in a context fn, which is a fn applied each time the ctx map is passed to a child. 
-This can be incredibly useful for instrumentation. 
+`component-provider` optionally takes in a context fn, which is applied each time the ctx map is passed to a component. 
+This can be incredibly useful for instrumentation, or for extending/adding additional abstractions on top of the library (think [domino](https://domino-clj.github.io/))  
 
 For example:
 
