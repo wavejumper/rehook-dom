@@ -100,8 +100,9 @@ Alternatively if you don't have access to the `AppRegistry`, you can use the `bo
 
 ## Context fns
 
-`component-provider` optionally takes in a context fn, which is applied each time the ctx map is passed to a component. 
-This can be incredibly useful for instrumentation, or for extending/adding additional abstractions on top of the library (eg implementing your own data flow engine ala [domino](https://domino-clj.github.io/))  
+`component-provider` optionally takes in a context fn, which is applied each time the ctx map is passed to a component. It defaults to the `identity` function.
+
+This can be incredibly useful for instrumentation, or for adding additional abstractions on top of the library (eg implementing your own data flow engine ala [domino](https://domino-clj.github.io/))
 
 For example:
 
