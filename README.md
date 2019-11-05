@@ -17,7 +17,7 @@ You do not need to use `rehook-rn-component` with `rehook`, but the two obviousl
 `rehook-rn-component` is designed to be: 
 
 * A simple, hiccup-inspired DSL for templating React Native components
-* A baggage-free way to pass down application context down to child components
+* A baggage-free way to pass down application context down (eg, system components) to child components
 
 The library is only 50LOC. It makes Clojurescript development with React Native a joy!
 
