@@ -23,7 +23,7 @@ The library is only 50LOC. It makes Clojurescript development with React Native 
 
 ## defui 
 
-`defui` is a macro used to define `rehook` components. This macro is simply syntactic sugar, all `rehook` components are cljs fns.
+`defui` is a macro used to define `rehook` components. This macro is only syntactic sugar, as all `rehook` components are cljs fns.
 
 `defui` takes in three arguments:
 
