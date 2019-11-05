@@ -1,5 +1,7 @@
 # rehook-rn-component
 
+[![Clojars Project](https://img.shields.io/clojars/v/wavejumper/rehook-rn-component.svg)](https://clojars.org/wavejumper/rehook-rn-component)
+
 React Native component DSL for Clojurescript
 
 ## Rehook?
