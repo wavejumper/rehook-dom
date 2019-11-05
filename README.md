@@ -6,7 +6,7 @@ React Native component DSL for Clojurescript
 
 ## Rehook?
 
-[rehook](https://github.com/wavejumper/rehook/) is my Clojurescript library for state management in React apps. 
+[rehook](https://github.com/wavejumper/rehook/) is a Clojurescript library for state management in React apps. 
 
 It is a simple, 35LOC library that provides a [reagent](https://github.com/reagent-project/reagent) like interface for modern Cljs/React apps.
 
@@ -16,7 +16,7 @@ You do not need to use `rehook-rn-component` with `rehook`, but the two obviousl
 
 `rehook-rn-component` is designed to be: 
 
-* A simple, hiccup-inspired DSL for accessing React Native components
+* A simple, hiccup-inspired DSL for templating React Native components
 * A baggage-free way to pass down application context down to child components
 
 The library is only 50LOC. It makes Clojurescript development with React Native a joy!
@@ -38,7 +38,7 @@ The library is only 50LOC. It makes Clojurescript development with React Native 
 
 ## $
 
-The `$` render fn provides Hiccup-like syntax for expressing the DOM tree. 
+The `$` render fn provides Hiccup-like syntax for templating. 
 
 Its signature looks like this: 
 `[component args? & children]`
