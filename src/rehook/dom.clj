@@ -5,7 +5,7 @@
   `(doto (defn ~name [ctx# $#]
            (let [~ctx ctx#
                  ~$ $#]
-             (fn ~(str (gensym name)) [props#]
+             (fn (gensym name) [props#]
                (let [~props props#]
                  ~@body))))
      (aset "displayName" ~(str name))
