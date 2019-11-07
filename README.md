@@ -1,6 +1,6 @@
 # rehook-dom
 
-[![Clojars Project](https://img.shields.io/clojars/v/wavejumper/rehook-rn-component.svg)](https://clojars.org/wavejumper/rehook-rn-component)
+[![Clojars Project](https://img.shields.io/clojars/v/wavejumper/rehook-dom.svg)](https://clojars.org/wavejumper/rehook-dom)
 
 React component micro-library for Clojurescript
 
