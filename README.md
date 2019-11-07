@@ -28,6 +28,7 @@ The core namespace is only 30LOC. It makes Clojurescript development with React 
   (dom.browser/bootstrap 
     (system) ;; <-- context map
     identity ;; <-- context transformer
+    clj->js ;; <-- props transformer
     my-component) ;; <-- root component
   (js/document.getElementById "myapp"))
 ```
@@ -65,18 +66,16 @@ And because all `rehook-dom` components are plain Cljs fns where all inputs are 
 
 Easy interop means you lose some Clojure idioms, but it keeps the API surface lean and obvious. 
 
-#### Hiccup-like templating
+#### Hiccup-ish templating
 
 While the resulting syntax is not as terse as conventional Hiccup notation, `rehook-dom` has no grammar! It's just function application.
 
 I see the lack of syntax a PRO. There is no additional (runtime or compile time) transformation step. 
 This makes the resulting DSL incredibly easy to reason about.
 
-Other templating libraries are not resiliant to future improvements to the React API, and some assumptions in these libraries mean they cannot support new features at all, or at a compromise. 
+Other templating libraries are not as resiliant to future improvements to the React API, and some assumptions in these libraries mean they cannot support new features at all, or at a compromise. 
 
-The best library is no library at all! `rehook-dom`  suffers from none of the problems traditional 'wrapping' libraries have.
-
-And that's because `react-dom` barely has an API surface!
+This is not the case for `rehook-dom` at all! The best library is no library at all :)
 
 The render fn is passed in as a argument to the component, so it can be overloaded. You can even write your own `bootstrap` fn, that defines how to render components! 
 
@@ -84,7 +83,7 @@ The render fn is passed in as a argument to the component, so it can be overload
 
 There shouldn't be any difference in API, except how you render or register your root component. 
 
-If another React target added in the future, it should be as simple as adding another register fn for the target platform.
+If another React target is added in the future, it should be as simple as adding another register fn for the new platform.
 
 ## defui 
 
@@ -93,7 +92,7 @@ If another React target added in the future, it should be as simple as adding an
 `defui` takes in three arguments:
 
 * `context`: immutable, application context
-* `props`: any props passed to the component. This will be an untouched JS object.
+* `props`: any props passed to the component. This will be an untouched JS object from React.
 * `$`: the render fn
 
 ```clojure
@@ -108,7 +107,7 @@ The anonymous counterpart is `rehook.dom/ui`
 
 ## $
 
-The `$` render fn provides Hiccup-like syntax for templating. 
+The `$` render fn provides Hiccup-inspired syntax for templating. 
 
 Its signature looks like this: 
 `[component args? & children]`
@@ -121,7 +120,7 @@ It supports component lookup in a few ways:
 
 * All keywords are mapped to their equivilant name in the [React Native API](https://facebook.github.io/react-native/docs/activityindicator), eg `:KeyboardAvoidingView`. For the DOM, they are mapped to their [tag name string](https://reactjs.org/docs/react-api.html#createelement), eg `:div`. 
 * Custom React Native components (eg, those imported from npm), can be referenced directly.
-* All collections map to [React fragments](https://reactjs.org/docs/react-api.html#reactfragment). Every item in the collection must be a valid react element.
+* All collections map to [React fragments](https://reactjs.org/docs/react-api.html#reactfragment). Every item in a collection must be a valid React element.
 
 ```clojure 
 (ns example.components
@@ -140,15 +139,18 @@ It supports component lookup in a few ways:
   ($ :View {:style #js {:flex 1}}
     ($ fragment)
     ($ button)
-    ($ ImportedReactComponent)))
+    ($ ImportedReactComponent {})))
 ```
 
 Note how the `$` render fn hides having to pass the `context` map to its children through clever partial function application!
 
-### Props gotchas
+### Props
 
-* Props passed to `$` are always covnerted to JS maps via `clj->js`
-* `rehook` does no special transformation to the keys in your props, so use `onPress` over `on-press` etc.
+A props transformation fn is passed to the initial `bootstrap` fn. 
+
+A good default to use is `cljs.core/clj->js`
+
+If you want to maintain Clojure idioms, a library like [camel-snake-kebab](https://github.com/clj-commons/camel-snake-kebab) could be used to convert keys in your props (eg, `on-press` to `onPress`)
 
 ## Initializing
 
@@ -167,7 +169,7 @@ You can call `react-dom/render` directly, and `bootstrap` your component:
   {:dispatch (fn [& _] (js/console.log "TODO: implement dispatch fn..."))})
 
 (defn main []
-  (react-dom/render (dom/bootstrap (system) identity app)) (js/document.getElementById "app"))
+  (react-dom/render (dom/bootstrap (system) identity clj->js app)) (js/document.getElementById "app"))
 ```
 
 ## React Native
@@ -190,20 +192,51 @@ You can use the `rehook.dom.native/component-provider` fn if you directly call [
 
 Alternatively, if you don't have access to the `AppRegistry`, you can use the `rehook.dom.native/boostrap` fn instead - which will return a valid React element
 
-## Context transformers
+## Context transformer
 
-`component-provider` optionally takes in a context fn, which is applied each time the context map is passed to a component. It defaults to the `identity` function.
-
-This can be incredibly useful for instrumentation, or for adding additional abstractions on top of the library (eg implementing your own data flow engine ala [domino](https://domino-clj.github.io/))
+The context transformer can be incredibly useful for instrumentation, or for adding additional abstractions on top of the library (eg implementing your own data flow engine ala [domino](https://domino-clj.github.io/))
 
 For example:
 
 ```clojure 
+(require '[rehook.util :as util])
+
 (defn ctx-transformer [ctx component]  
-  (update ctx :log-ctx #(conj (or % []) (dom/component-name component))))
+  (update ctx :log-ctx #(conj (or % []) (util/display-name component))))
 
 (dom/component-provider (system) ctx-transformer app)
 ```
+
+In this example, each component will have the relative hierarchy of parents in the DOM tree under the key `:log-ctx`. 
+
+This can be incredibly useful context to pass to your logging/metrics library!
+
+# Performance / comparisons
+
+This [repo](https://github.com/wavejumper/rehook-examples/tree/master/src/rehook/benchmark) benchmarks rendering todovc (found in Reagent's [examples](https://github.com/reagent-project/reagent/tree/master/examples/todomvc)) against two other implementations:
+
+* `rehook-dom`: todomvc rewritten to use [rehook](https://github.com/wavejumper/rehook) with [rehook-dom](https://github.com/wavejumper/rehook-dom)
+* `rehook-hicada`: todomvc rewritten to use [rehook](https://github.com/wavejumper/hicada) with [hicada](https://github.com/rauhs/hicada)
+* `reagent`: todomvc found in Reagent's Github repo
+
+Results:
+
+```
+reagent x 233 ops/sec ±9.95% (44 runs sampled)
+rehook-dom x 223 ops/sec ±7.53% (45 runs sampled)
+rehook-hicada x 489 ops/sec ±6.92% (47 runs sampled)
+```
+
+Observations:
+
+* It looks like you gain performance by ditching the overhead of Reagent/ratoms and using React hooks
+* It looks like you gain a lot of performance with Hicada's compile-time optimizations
+* It looks like you lose all the performance of Hicada when you use `react-dom`, though it comes out about as fast as reagent :p
+
+ Two things to note:
+ 
+ * todomvc reimplementations try to stay as close to the original as possible. That means the implementations shouldn't be seen as a reference on how you should actually write a Cljs app with React hooks. 
+ * In a real world React app, IMO performance boils down to cascading re-renders of child components. This will be entirely dependant on how you've modelled your data (and how your component tree is structured to consume that data). The above benchmark is incredibly naive, but nicely illustrates the performance overhead of templating.
 
 # Testing
 
