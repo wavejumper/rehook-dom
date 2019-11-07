@@ -6,7 +6,7 @@
 (defn handle-type
   [e ctx $]
   (cond
-    (or (keyword? e) (string? e))
+    (keyword? e)
     (name e)
 
     (util/rehook-component? e)
@@ -15,16 +15,15 @@
     (sequential? e)
     (apply react/Fragment e)
 
-    :else
-    e))
+    :else e))
 
 (defn bootstrap
-  ([ctx ctx-f e]
+  ([ctx ctx-f props-f e]
    (let [ctx (ctx-f ctx e)]
-     (react/createElement (handle-type e ctx (partial bootstrap ctx ctx-f)))))
-  ([ctx ctx-f e args]
+     (react/createElement (handle-type e ctx (partial bootstrap ctx ctx-f props-f)))))
+  ([ctx ctx-f props-f e args]
    (let [ctx (ctx-f ctx e)]
-     (react/createElement (handle-type e ctx (partial bootstrap ctx ctx-f)) (clj->js args))))
-  ([ctx ctx-f e args & children]
+     (react/createElement (handle-type e ctx (partial bootstrap ctx ctx-f)) (props-f args))))
+  ([ctx ctx-f props-f e args & children]
    (let [ctx (ctx-f ctx e)]
-     (apply react/createElement (handle-type e ctx (partial bootstrap ctx ctx-f)) (clj->js args) children))))
+     (apply react/createElement (handle-type e ctx (partial bootstrap ctx ctx-f)) (props-f args) children))))

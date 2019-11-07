@@ -7,7 +7,7 @@
 (defn handle-type
   [e ctx $]
   (cond
-    (or (keyword? e) (string? e))
+    (keyword? e)
     (aget rn (name e))
 
     (util/rehook-component? e)
@@ -16,8 +16,7 @@
     (sequential? e)
     (apply react/Fragment e)
 
-    :else
-    e))
+    :else e))
 
 (defn bootstrap
   ([ctx ctx-f e]

@@ -1,4 +1,4 @@
-(defproject wavejumper/rehook-dom "1.1.3"
+(defproject wavejumper/rehook-dom "1.1.4"
   :description "React component DSL for Clojurescript"
   :url "https://github.com/wavejumper/rehook-dom"
 
