@@ -1,6 +1,8 @@
 # rehook-dom
 
-React component DSL for Clojurescript
+[![Clojars Project](https://img.shields.io/clojars/v/wavejumper/rehook-rn-component.svg)](https://clojars.org/wavejumper/rehook-rn-component)
+
+React component micro-library for Clojurescript
 
 The core namespace is only 30LOC. It makes Clojurescript development with React a joy!
 
@@ -28,13 +30,11 @@ The core namespace is only 30LOC. It makes Clojurescript development with React 
     identity ;; <-- context transformer
     my-component) ;; <-- root component
   (js/document.getElementById "myapp"))
-
-
 ```
 
 ## Rehook?
 
-[rehook](https://github.com/wavejumper/rehook/) is my Clojurescript library for state management in React apps. 
+[rehook](https://github.com/wavejumper/rehook/) is a Clojurescript library for state management in React apps. 
 
 It is a simple, 35LOC library that provides a [reagent](https://github.com/reagent-project/reagent) like interface for modern Cljs/React apps.
 
@@ -94,7 +94,7 @@ If another React target added in the future, it should be as simple as adding an
 
 ## defui 
 
-`rehook.dom/defui` is a macro used to define `rehook` components. This macro is simply syntactic sugar, all `rehook` components are cljs fns.
+`rehook.dom/defui` is a macro used to define `rehook` components. This macro is only syntactic sugar, as all `rehook` components are cljs fns.
 
 `defui` takes in three arguments:
 
@@ -114,7 +114,7 @@ The anonymous counterpart is `rehook.dom/ui`
 
 ## $
 
-The `$` render fn provides Hiccup-like syntax for expressing the DOM tree. 
+The `$` render fn provides Hiccup-like syntax for templating. 
 
 Its signature looks like this: 
 `[component args? & children]`
@@ -123,7 +123,7 @@ Its signature looks like this:
 * The second (optional) argument are the component props.
 * The third (optional) vararg are any component children
 
-It supports lookup to components in a few ways:
+It supports component lookup in a few ways:
 
 * All keywords are mapped to their equivilant name in the [React Native API](https://facebook.github.io/react-native/docs/activityindicator), eg `:KeyboardAvoidingView`. For the DOM, they are mapped to their [tag name string](https://reactjs.org/docs/react-api.html#createelement), eg `:div`. 
 * Custom React Native components (eg, those imported from npm), can be referenced directly.
@@ -142,7 +142,7 @@ It supports lookup to components in a few ways:
 (defui button [{:keys [dispatch]} _ $]
   ($ :Button {:title "Fire missles" :onClick #(dispatch :fire-missles)}))
 
-(defui app [_ $]
+(defui app [_ _ $]
   ($ :View {:style #js {:flex 1}}
     ($ fragment)
     ($ button)
@@ -196,10 +196,11 @@ You can use the `rehook.dom.native/component-provider` fn if you directly call [
 
 Alternatively, if you don't have access to the `AppRegistry`, you can use the `rehook.dom.native/boostrap` fn instead - which will return a valid React element
 
-## Context fns
+## Context transformers
 
-`component-provider` optionally takes in a context fn, which is a fn applied each time the ctx map is passed to a child. 
-This can be incredibly useful for instrumentation. 
+`component-provider` optionally takes in a context fn, which is applied each time the context map is passed to a component. It defaults to the `identity` function.
+
+This can be incredibly useful for instrumentation, or for adding additional abstractions on top of the library (eg implementing your own data flow engine ala [domino](https://domino-clj.github.io/))
 
 For example:
 
@@ -216,5 +217,3 @@ For example:
  Therefore, you can treat your components as 'pure functions', as all inputs to the component are passed in as arguments.
 
 Testing (with React hooks) is a deeper topic that I will explore via a blog post in the coming months. Please check back!
-
- 
