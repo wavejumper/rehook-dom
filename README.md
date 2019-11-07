@@ -22,7 +22,7 @@ The core namespace is only 30LOC. It makes Clojurescript development with React 
   [{:keys [dispatch]} ;; <-- context map returned from bootstrap fn
    props ;; <-- any props passed from parent component
    $] ;; <-- the render fn
-  ($ :Text {:onClick #(dispatch :fire-missles)} "Hello world"))
+  ($ :div {:onClick #(dispatch :fire-missles)} "Hello world"))
 
 (react-dom/render 
   (dom.browser/bootstrap 
