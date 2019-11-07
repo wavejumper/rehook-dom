@@ -49,7 +49,7 @@ Maybe you want to use [integrant](https://github.com/weavejester/integrant) or [
 
 One of the biggest downfalls to cljs development is the global singleton state design adopted by many libraries. 
 
-Eg, `re-frame` becomes cumbersome to test, or even run multiple instances of (think devcards use case) because of this pattern.
+Eg, [re-frame](https://github.com/day8/re-frame) becomes cumbersome to test, or even run multiple instances of (think devcards use case) because of this pattern.
 
 This is generally a trade-off between convenience and 'pureness'.
 
