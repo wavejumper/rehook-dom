@@ -10,3 +10,13 @@
                  ~@body))))
      (aset "displayName" ~(str name))
      (aset "isRehookComponent" true)))
+
+(defmacro ui
+  [[ctx props $] & body]
+  `(doto (fn [ctx# $#]
+           (let [~ctx ctx#
+                 ~$ $#]
+             (fn [props#]
+               (let [~props props#]
+                 ~@body))))
+     (aset "isRehookComponent" true)))
