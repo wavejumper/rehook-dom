@@ -72,13 +72,7 @@ While the resulting syntax is not as terse as conventional Hiccup notation, `reh
 I see the lack of syntax a PRO. There is no additional (runtime or compile time) transformation step. 
 This makes the resulting DSL incredibly easy to reason about.
 
-There is an implied grammar in other templating libraries, which can sometimes be a gotcha:
-* Sablono doesn't support fragments
-* Hicada expects the props argument to be a literal map 
-* Sablono doesn't work with react native
-
-I view these libraries as static artifacts of how React works in the now. 
-They are not resiliant to future improvements to the React API, and some assumptions in these libraries mean they cannot support new features at all, or at a compromise.
+Other templating libraries are not resiliant to future improvements to the React API, and some assumptions in these libraries mean they cannot support new features at all, or at a compromise. 
 
 The best library is no library at all! `rehook-dom`  suffers from none of the problems traditional 'wrapping' libraries have.
 
