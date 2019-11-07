@@ -77,7 +77,7 @@ Other templating libraries are not as resiliant to future improvements to the Re
 
 This is not the case for `rehook-dom` at all! The best library is no library at all :)
 
-The render fn is passed in as a argument to the component, so it can be overloaded. You can even write your own `bootstrap` fn, that defines how to render components! 
+The render fn is passed in as a argument to the component, so it can be overloaded. You can even write your own `bootstrap` fn that defines how to render components! 
 
 #### react-dom and react-native support
 
