@@ -169,7 +169,9 @@ You can call `react-dom/render` directly, and `bootstrap` your component:
   {:dispatch (fn [& _] (js/console.log "TODO: implement dispatch fn..."))})
 
 (defn main []
-  (react-dom/render (dom/bootstrap (system) identity clj->js app)) (js/document.getElementById "app"))
+  (react-dom/render 
+    (dom/bootstrap (system) identity clj->js app)) 
+    (js/document.getElementById "app")))
 ```
 
 ## react-native
