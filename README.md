@@ -73,7 +73,7 @@ While the resulting syntax is not as terse as conventional Hiccup notation, `reh
 I see the lack of syntax a PRO. There is no additional (runtime or compile time) transformation step. 
 This makes the resulting DSL incredibly easy to reason about.
 
-Other templating libraries are not as resiliant to future improvements to the React API, and some assumptions in these libraries mean they cannot support new features at all, or at a compromise. 
+Other templating libraries are not as resilient to future improvements to the React API, and some assumptions in these libraries mean they cannot support new features at all, or at a compromise. 
 
 This is not the case for `rehook-dom` at all! The best library is no library at all :)
 
@@ -118,7 +118,7 @@ Its signature looks like this:
 
 It supports component lookup in a few ways:
 
-* All keywords are mapped to their equivilant name in the [React Native API](https://facebook.github.io/react-native/docs/activityindicator), eg `:KeyboardAvoidingView`. For the DOM, they are mapped to their [tag name string](https://reactjs.org/docs/react-api.html#createelement), eg `:div`. 
+* All keywords are mapped to their equivalent name in the [React Native API](https://facebook.github.io/react-native/docs/activityindicator), eg `:KeyboardAvoidingView`. For the DOM, they are mapped to their [tag name string](https://reactjs.org/docs/react-api.html#createelement), eg `:div`. 
 * Custom React Native components (eg, those imported from npm), can be referenced directly.
 * All collections map to [React fragments](https://reactjs.org/docs/react-api.html#reactfragment). Every item in a collection must be a valid React element.
 
