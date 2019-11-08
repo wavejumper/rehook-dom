@@ -129,11 +129,11 @@ It supports component lookup in a few ways:
     ["imported-react-component" :refer [ImportedReactComponent]]))
 
 (defui fragment [_ _ $]
-  [($ :Text "I am a fragment!")
-   ($ :Text "I return multiple React elements")])
+  [($ :Text {} "I am a fragment!")
+   ($ :Text {} "I return multiple React elements")])
 
 (defui button [{:keys [dispatch]} _ $]
-  ($ :Button {:title "Fire missles" :onClick #(dispatch :fire-missles)}))
+  ($ :Button {:title "Fire missles" :onPress #(dispatch :fire-missles)}))
 
 (defui app [_ _ $]
   ($ :View {:style #js {:flex 1}}
