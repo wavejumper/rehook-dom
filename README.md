@@ -207,7 +207,7 @@ For example:
 (defn ctx-transformer [ctx component]  
   (update ctx :log-ctx #(conj (or % []) (util/display-name component))))
 
-(dom/component-provider (system) ctx-transformer app)
+(dom/component-provider (system) ctx-transformer clj->js app)
 ```
 
 In this example, each component will have the relative hierarchy of parents in the DOM tree under the key `:log-ctx`. 
