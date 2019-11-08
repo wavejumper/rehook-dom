@@ -161,8 +161,8 @@ You can call `react-dom/render` directly, and `bootstrap` your component:
 ```clojure 
 (ns example.core 
   (:require 
-    [examples.component :refer [app]]
-    [rehook.dom.native :as dom]
+    [example.components :refer [app]]
+    [rehook.dom.browser :as dom]
     ["react-dom" :as react-dom]))
 
 (defn system []
