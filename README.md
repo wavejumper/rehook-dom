@@ -154,7 +154,7 @@ If you want to maintain Clojure idioms, a library like [camel-snake-kebab](https
 
 ## Initializing
 
-## React
+## react-dom
 
 You can call `react-dom/render` directly, and `bootstrap` your component:
 
@@ -172,7 +172,7 @@ You can call `react-dom/render` directly, and `bootstrap` your component:
   (react-dom/render (dom/bootstrap (system) identity clj->js app)) (js/document.getElementById "app"))
 ```
 
-## React Native
+## react-native
 
 You can use the `rehook.dom.native/component-provider` fn if you directly call [AppRegistry](https://facebook.github.io/react-native/docs/appregistry)
 
