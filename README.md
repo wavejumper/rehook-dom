@@ -179,9 +179,12 @@ You can use the `rehook.dom.native/component-provider` fn if you directly call [
 ```clojure 
 (ns example.core
   (:require 
-    [example.components :refer [app]]
+    [rehook.dom :refer-macros [defui]]
     [rehook.dom.native :as dom]
     ["react-native" :refer [AppRegistry]]))
+
+(defui app [{:keys [dispatch]} _ $]
+  ($ :Text {:onPress #(dispatch :fire-missles)} "Fire missles!"))
 
 (defn system []
   {:dispatch (fn [& _] (js/console.log "TODO: implement dispatch fn..."))})
