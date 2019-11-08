@@ -170,7 +170,7 @@ You can call `react-dom/render` directly, and `bootstrap` your component:
 
 (defn main []
   (react-dom/render 
-    (dom/bootstrap (system) identity clj->js app)) 
+    (dom/bootstrap (system) identity clj->js app)
     (js/document.getElementById "app")))
 ```
 
@@ -212,7 +212,7 @@ For example:
 (dom/component-provider (system) ctx-transformer clj->js app)
 ```
 
-In this example, each component will have the relative hierarchy of parents in the DOM tree under the key `:log-ctx`. 
+In this example, each component will have the hierarchy of its parents in the DOM tree under the key `:log-ctx`. 
 
 This can be incredibly useful context to pass to your logging/metrics library!
 
