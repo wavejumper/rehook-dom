@@ -49,7 +49,7 @@ Maybe you want to use [integrant](https://github.com/weavejester/integrant) or [
 
 One of the biggest downfalls to cljs development is the global singleton state design adopted by many libraries. 
 
-Eg, `re-frame` becomes cumbersome to test, or even run multiple instances of (think devcards use case) because of this pattern.
+Eg, [re-frame](https://github.com/day8/re-frame) becomes cumbersome to test, or even run multiple instances of (think devcards use case) because of this pattern.
 
 This is generally a trade-off between convenience and 'pureness'.
 
@@ -77,7 +77,7 @@ Other templating libraries are not as resiliant to future improvements to the Re
 
 This is not the case for `rehook-dom` at all! The best library is no library at all :)
 
-The render fn is passed in as a argument to the component, so it can be overloaded. You can even write your own `bootstrap` fn, that defines how to render components! 
+The render fn is passed in as a argument to the component, so it can be overloaded. You can even write your own `bootstrap` fn that defines how to render components! 
 
 #### react-dom and react-native support
 
