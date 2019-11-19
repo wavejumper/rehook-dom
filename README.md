@@ -102,7 +102,7 @@ It takes in two arguments:
 
 ### fragments
 
-Simply return a collection of markup:
+Simply return a collection of hiccup:
 
 ```clojure
 (defui fragmented-ui [_ _ $]
