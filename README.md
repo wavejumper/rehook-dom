@@ -111,9 +111,6 @@ Simply return a collection of hiccup:
   (html $ [[:div {} "Div 1"] [:div {} "Div 2"]]))
 ```
 
-Because the `$` render fn is passed into every rehook component you can overload it -- or better yet create your own abstract macros!
-
-
 ### rehook components
 
 Reference the component directly:
@@ -159,6 +156,8 @@ You can opt-out of the macro like so:
 (defui no-html-macro [_ _ $]
   (html $ :div {} "Macro free"))
 ```
+
+Because the `$` render fn is passed into every rehook component you can overload it -- or better yet create your own abstract macros!
 
 ## Props
 
