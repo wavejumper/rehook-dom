@@ -7,6 +7,11 @@
   (dom/html $ [:div {:ctx ctx :props props}
                [:div {} "Hello world!"]]))
 
+(deftest defui-symbol-as-component
+  (let [hiccup [:div {} "hello world"]]
+    (is (= '(:div {} "hello world")
+           (dom/html list hiccup)))))
+
 (deftest defui-macros
   (let [result ((test-component {:my :ctx}
                                 list)

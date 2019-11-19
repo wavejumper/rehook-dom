@@ -1,6 +1,18 @@
 (ns rehook.dom)
 
-(defn ->html
+(defn eval-hiccup
+  ([$ e]
+   ($ e))
+  ([$ e props]
+   ($ e props))
+  ([$ e props & children]
+   (apply $ e props (map (fn [x]
+                           (if (sequential? x)
+                             (apply eval-hiccup $ x)
+                             x))
+                         children))))
+
+(defn compile-hiccup
   ([$ e]
    (list $ e))
   ([$ e props]
@@ -8,13 +20,15 @@
   ([$ e props & children]
    (apply list $ e props (map (fn [x]
                                 (if (sequential? x)
-                                  (apply ->html $ x)
+                                  (apply compile-hiccup $ x)
                                   x))
                               children))))
 
 #?(:clj
    (defmacro html [$ component]
-     `~(apply ->html $ component)))
+     (if (vector? component)
+       `~(apply compile-hiccup $ component)
+       `(apply eval-hiccup ~$ ~component))))
 
 #?(:clj
    (defmacro defui
