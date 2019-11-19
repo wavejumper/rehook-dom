@@ -18,7 +18,7 @@ React component micro-library for Clojurescript
   {:dispatch #(js/console.log "TODO: implement" %)})
 
 (defui my-component 
-  [{:keys [dispatch]} ;; <-- context map returned from bootstrap fn
+  [{:keys [dispatch]} ;; <-- context map from bootstrap fn
    props ;; <-- any props passed from parent component
    $] ;; <-- the render fn
   (html $ [:div {:onClick #(dispatch :fire-missles)} "Fire missiles"]))
