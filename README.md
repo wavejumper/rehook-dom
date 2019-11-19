@@ -111,15 +111,6 @@ Simply return a collection of hiccup:
   (html $ [[:div {} "Div 1"] [:div {} "Div 2"]]))
 ```
 
-### without the macro
-
-You can opt-out of the macro like so:
-
-```clojure
-(defui no-html-macro [_ _ $]
-  (html $ :div {} "Macro free"))
-```
-
 Because the `$` render fn is passed into every rehook component you can overload it -- or better yet create your own abstract macros!
 
 
@@ -146,11 +137,20 @@ Same as rehook components. Reference the component directly:
   (html $ [ReactSelect props]))
 ```
 
-### Props
+### without the macro
 
-A props transformation fn is passed to the initial `bootstrap` fn. 
+You can opt-out of the macro like so:
 
-A good default to use is `cljs.core/clj->js`
+```clojure
+(defui no-html-macro [_ _ $]
+  (html $ :div {} "Macro free"))
+```
+
+## Props
+
+A props transformation fn is passed to the initial `bootstrap` fn. The return value of this fn must be a JS object.
+
+A good default to use is `cljs.core/clj->js`. 
 
 If you want to maintain Clojure idioms, a library like [camel-snake-kebab](https://github.com/clj-commons/camel-snake-kebab) could be used to convert keys in your props (eg, `on-press` to `onPress`)
 
