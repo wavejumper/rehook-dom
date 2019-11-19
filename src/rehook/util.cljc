@@ -1,7 +1,7 @@
 (ns rehook.util)
 
 (defn rehook-component? [e]
-  (true? (aget e "isRehookComponent")))
+  (-> e meta :rehook/component true?))
 
 (defn display-name [e]
   (if (keyword? e)

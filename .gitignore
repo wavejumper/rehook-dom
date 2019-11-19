@@ -2,3 +2,5 @@
 .idea/
 *.xml*
 target/
+.lein-failures
+.repl-port
