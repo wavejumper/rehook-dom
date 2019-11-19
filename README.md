@@ -125,7 +125,7 @@ Reference the component directly:
 
 Same as rehook components. Reference the component directly:
 
-```
+```clojure
 (require '["react-select" :as ReactSelect])
 
 (defui select [_ props $]
