@@ -6,11 +6,11 @@
   ([$ e props]
    ($ e props))
   ([$ e props & children]
-   (apply $ e props (map (fn [x]
-                           (if (vector? x)
-                             (apply eval-hiccup $ x)
-                             x))
-                         children))))
+   (apply $ e props (keep (fn [x]
+                            (if (vector? x)
+                              (apply eval-hiccup $ x)
+                              x))
+                          children))))
 
 (defn compile-hiccup
   ([$ e]
@@ -18,15 +18,15 @@
   ([$ e props]
    (list $ e props))
   ([$ e props & children]
-   (apply list $ e props (map (fn [x]
-                                (cond
-                                  (vector? x)
-                                  (apply compile-hiccup $ x)
+   (apply list $ e props (keep (fn [x]
+                                 (cond
+                                   (vector? x)
+                                   (apply compile-hiccup $ x)
 
-                                  (or (string? x) (number? x))
-                                  x
+                                   (or (nil? x) (string? x) (number? x))
+                                   x
 
-                                  :else `(apply eval-hiccup ~$ ~x)))
+                                   :else `(apply eval-hiccup ~$ ~x)))
                               children))))
 
 #?(:clj

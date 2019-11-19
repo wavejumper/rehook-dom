@@ -9,12 +9,12 @@
                [:div {} "Hello world!"]]))
 
 (deftest defui-symbol-as-component
-  (let [hiccup [:div {} "hello world"]]
+  (let [hiccup [:div {} nil "hello world"]]
     (is (= '(:div {} "hello world")
            (dom/html list hiccup)))))
 
 (deftest embedded-symbol
-  (let [embedded-child [:div {} "foo"]]
+  (let [embedded-child [:div {} nil "foo"]]
     (is (= (dom/html list [:div {} embedded-child])
            '(:div {} (:div {} "foo"))))))
 
@@ -55,6 +55,7 @@
                              [(dom/ui [ctx _ $]
                                   (dom/html $ [:div ctx "Hello world"]))])
                            "---"
+                           nil
                            (when true
                              [nested-child-component])])]))
 
