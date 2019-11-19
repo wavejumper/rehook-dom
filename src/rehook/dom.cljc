@@ -39,7 +39,8 @@
    (defmacro defui
      [name [ctx props $] & body]
      `(def ~name
-        ^:rehook/component
+        ^{:rehook/component true
+          :rehook/name      ~(str name)}
         (fn [ctx# $#]
           (let [~ctx ctx#
                 ~$ $#]
@@ -50,12 +51,14 @@
 #?(:clj
    (defmacro ui
      [[ctx props $] & body]
-     `(with-meta
-       (fn [ctx# $#]
-         (let [~ctx ctx#
-               ~$ $#]
-           (fn [props#]
-             (let [~props props#]
-               ~@body))))
-       {:rehook/component true})))
+     (let [id (gensym "ui")]
+       `(with-meta
+          (fn ~id [ctx# $#]
+            (let [~ctx ctx#
+                  ~$ $#]
+              (fn [props#]
+                (let [~props props#]
+                  ~@body))))
+          {:rehook/component true
+           :rehook/name      ~(str id)}))))
 
