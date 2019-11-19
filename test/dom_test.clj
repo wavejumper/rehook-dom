@@ -13,6 +13,11 @@
     (is (= '(:div {} "hello world")
            (dom/html list hiccup)))))
 
+(deftest embedded-symbol
+  (let [embedded-child [:div {} "foo"]]
+    (is (= (dom/html list [:div {} embedded-child])
+           '(:div {} (:div {} "foo"))))))
+
 (deftest defui-macros
   (let [result ((test-component {:my :ctx}
                                 list)
