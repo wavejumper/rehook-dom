@@ -81,6 +81,8 @@ If another React target is added in the future, it should be as simple as adding
 * `props`: any props passed to the component. This will be an untouched JS object from React.
 * `$`: the render fn
 
+It must return a valid React element.
+
 ```clojure
 (ns demo 
   (:require [rehook.dom :refer-macros [defui]]))
@@ -108,6 +110,18 @@ Simply return a collection of hiccup:
 (defui fragmented-ui [_ _ $]
   (html $ [[:div {} "Div 1"] [:div {} "Div 2"]]))
 ```
+
+### without the macro
+
+You can opt-out of the macro like so:
+
+```clojure
+(defui no-html-macro [_ _ $]
+  (html $ :div {} "Macro free"))
+```
+
+Because the `$` render fn is passed into every rehook component you can overload it -- or better yet create your own abstract macros!
+
 
 ### rehook components
 
