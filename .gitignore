@@ -3,4 +3,4 @@
 *.xml*
 target/
 .lein-failures
-.repl-port
+.nrepl-port
