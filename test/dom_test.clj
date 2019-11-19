@@ -55,7 +55,8 @@
                              [(dom/ui [ctx _ $]
                                   (dom/html $ [:div ctx "Hello world"]))])
                            "---"
-                           [nested-child-component]])]))
+                           (when true
+                             [nested-child-component])])]))
 
 (deftest complex-eval-logic
   (is (= [:div {:my :ctx}

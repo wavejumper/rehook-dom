@@ -12,14 +12,6 @@
                              x))
                          children))))
 
-(declare compile-hiccup)
-
-#?(:clj
-   (defmacro html [$ component]
-     (if (vector? component)
-       `~(apply compile-hiccup $ component)
-       `(apply eval-hiccup ~$ ~component))))
-
 (defn compile-hiccup
   ([$ e]
    (list $ e))
@@ -28,11 +20,20 @@
   ([$ e props & children]
    (apply list $ e props (map (fn [x]
                                 (cond
-                                  (vector? x) (apply compile-hiccup $ x)
-                                  (string? x) x
-                                  (number? x) x
-                                  :else `(html ~$ ~x)))
+                                  (vector? x)
+                                  (apply compile-hiccup $ x)
+
+                                  (or (string? x) (number? x))
+                                  x
+
+                                  :else `(apply eval-hiccup ~$ ~x)))
                               children))))
+
+#?(:clj
+   (defmacro html [$ component]
+     (if (vector? component)
+       `~(apply compile-hiccup $ component)
+       `(apply eval-hiccup ~$ ~component))))
 
 #?(:clj
    (defmacro defui
