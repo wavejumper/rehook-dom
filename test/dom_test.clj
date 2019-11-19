@@ -31,4 +31,4 @@
            '(:div {:ctx {:my :ctx}, :props {:props :my-props}}
              (:div {} "Hello world!"))))
 
-    (is (util/rehook-component? test-component))))
+    (is (util/rehook-component? anon-component))))

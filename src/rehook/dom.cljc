@@ -31,10 +31,11 @@
 #?(:clj
    (defmacro ui
      [[ctx props $] & body]
-     ^:rehook/component
-     `(fn [ctx# $#]
-        (let [~ctx ctx#
-              ~$ $#]
-          (fn [props#]
-            (let [~props props#]
-              ~@body))))))
+     `(with-meta
+       (fn [ctx# $#]
+         (let [~ctx ctx#
+               ~$ $#]
+           (fn [props#]
+             (let [~props props#]
+               ~@body))))
+       {:rehook/component true})))
