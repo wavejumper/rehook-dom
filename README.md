@@ -91,6 +91,47 @@ If another React target is added in the future, it should be as simple as adding
 
 The anonymous counterpart is `rehook.dom/ui`
 
+## html
+
+The `html` macro provides hiccup syntactic sugar. 
+
+It takes in two arguments:
+
+* `$` the render fn
+* `component` hiccup data 
+
+### fragments
+
+Simply return a collection of markup:
+
+```clojure
+(defui fragmented-ui [_ _ $]
+  (html $ [[:div {} "Div 1"] [:div {} "Div 2"]]))
+```
+
+### rehook components
+
+Reference the component directly:
+
+```clojure
+(defui child [_ _ $] 
+  (html $ [:div {} "I am the child"]))
+  
+(defui parent [_ _ $]
+  (html $ [child]))
+```
+
+### reactjs components
+
+Same as rehook components. Reference the component directly:
+
+```
+(require '["react-select" :as ReactSelect])
+
+(defui select [_ props $]
+  (html $ [ReactSelect props]))
+```
+
 ### Props
 
 A props transformation fn is passed to the initial `bootstrap` fn. 
