@@ -3,7 +3,7 @@
 [![Clojars Project](https://img.shields.io/clojars/v/wavejumper/rehook-dom.svg)](https://clojars.org/wavejumper/rehook-dom)
 [![CircleCI](https://circleci.com/gh/wavejumper/rehook-dom.svg?style=svg)](https://circleci.com/gh/wavejumper/rehook-dom)
 
-React component micro-library for Clojurescript
+React component micro-library for Clojurescript enabling data-driven architecture
 
 #### Hello world
 
@@ -81,6 +81,8 @@ If another React target is added in the future, it should be as simple as adding
 * `props`: any props passed to the component. This will be an untouched JS object from React.
 * `$`: the render fn
 
+It must return a valid React element.
+
 ```clojure
 (ns demo 
   (:require [rehook.dom :refer-macros [defui]]))
@@ -132,11 +134,36 @@ Same as rehook components. Reference the component directly:
   (html $ [ReactSelect props]))
 ```
 
-### Props
+### macro tips 
 
-A props transformation fn is passed to the initial `bootstrap` fn. 
+The `html` macro will try to do as much of the computation at compile time.
 
-A good default to use is `cljs.core/clj->js`
+If you can, aim to render literal hiccup components where possible:
+
+```clojure
+;; okish
+(html $ (if some-var? [:div {} "Found"] [:div {} "Not found"]))
+
+;; betterer
+(if some-var (html $ [:div {} "Found"]) (html $ [:div {} "Not found"])))
+```
+
+### without the macro
+
+You can opt-out of the macro like so:
+
+```clojure
+(defui no-html-macro [_ _ $]
+  (html $ :div {} "Macro free"))
+```
+
+Because the `$` render fn is passed into every rehook component you can overload it -- or better yet create your own abstract macros!
+
+## Props
+
+A props transformation fn is passed to the initial `bootstrap` fn. The return value of this fn must be a JS object.
+
+A good default to use is `cljs.core/clj->js`. 
 
 If you want to maintain Clojure idioms, a library like [camel-snake-kebab](https://github.com/clj-commons/camel-snake-kebab) could be used to convert keys in your props (eg, `on-press` to `onPress`)
 
