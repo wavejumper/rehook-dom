@@ -7,7 +7,7 @@
    ($ e props))
   ([$ e props & children]
    (apply $ e props (map (fn [x]
-                           (if (sequential? x)
+                           (if (vector? x)
                              (apply eval-hiccup $ x)
                              x))
                          children))))
@@ -19,9 +19,10 @@
    (list $ e props))
   ([$ e props & children]
    (apply list $ e props (map (fn [x]
-                                (if (sequential? x)
-                                  (apply compile-hiccup $ x)
-                                  x))
+                                (cond
+                                  (vector? x) (apply compile-hiccup $ x)
+                                  (list? x) `(apply eval-hiccup ~$ ~x)
+                                  :else x))
                               children))))
 
 #?(:clj
@@ -53,3 +54,4 @@
              (let [~props props#]
                ~@body))))
        {:rehook/component true})))
+
