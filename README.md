@@ -1,17 +1,16 @@
 # rehook-dom
 
 [![Clojars Project](https://img.shields.io/clojars/v/wavejumper/rehook-dom.svg)](https://clojars.org/wavejumper/rehook-dom)
+[![CircleCI](https://circleci.com/gh/wavejumper/rehook-dom.svg?style=svg)](https://circleci.com/gh/wavejumper/rehook-dom)
 
 React component micro-library for Clojurescript
-
-The core namespace is only 30LOC. It makes Clojurescript development with React a joy!
 
 #### Hello world
 
 ```clojure
 (ns demo 
   (:require 
-    [rehook.dom :refer-macros [defui]]
+    [rehook.dom :refer-macros [defui html]]
     [react.dom.browser :as dom.browser]
     ["react-dom" :as react-dom]))
 
@@ -19,10 +18,10 @@ The core namespace is only 30LOC. It makes Clojurescript development with React 
   {:dispatch #(js/console.log "TODO: implement" %)})
 
 (defui my-component 
-  [{:keys [dispatch]} ;; <-- context map returned from bootstrap fn
+  [{:keys [dispatch]} ;; <-- context map from bootstrap fn
    props ;; <-- any props passed from parent component
    $] ;; <-- the render fn
-  ($ :div {:onClick #(dispatch :fire-missles)} "Hello world"))
+  (html $ [:div {:onClick #(dispatch :fire-missles)} "Fire missiles"]))
 
 (react-dom/render 
   (dom.browser/bootstrap 
@@ -49,7 +48,7 @@ Maybe you want to use [integrant](https://github.com/weavejester/integrant) or [
 
 One of the biggest downfalls to cljs development is the global singleton state design adopted by many libraries. 
 
-Eg, [re-frame](https://github.com/day8/re-frame) becomes cumbersome to test, or even run multiple instances of (think devcards use case) because of this pattern.
+Eg, [re-frame](https://github.com/day8/re-frame) becomes cumbersome to test, or even run multiple instances of (think devcards use case or server-side rendering) because of this pattern.
 
 This is generally a trade-off between convenience and 'pureness'.
 
@@ -65,19 +64,6 @@ And because all `rehook-dom` components are plain Cljs fns where all inputs are 
 * A Clojurescript developer should be able to read the docs of `my-react-library` and intuitively map its props and API to Clojurescript.
 
 Easy interop means you lose some Clojure idioms, but it keeps the API surface lean and obvious. 
-
-#### Hiccup-ish templating
-
-While the resulting syntax is not as terse as conventional Hiccup notation, `rehook-dom` has no grammar! It's just function application.
-
-I see the lack of syntax a PRO. There is no additional (runtime or compile time) transformation step. 
-This makes the resulting DSL incredibly easy to reason about.
-
-Other templating libraries are not as resilient to future improvements to the React API, and some assumptions in these libraries mean they cannot support new features at all, or at a compromise. 
-
-This is not the case for `rehook-dom` at all! The best library is no library at all :)
-
-The render fn is passed in as a argument to the component, so it can be overloaded. You can even write your own `bootstrap` fn that defines how to render components! 
 
 #### react-dom and react-native support
 
@@ -100,49 +86,51 @@ If another React target is added in the future, it should be as simple as adding
   (:require [rehook.dom :refer-macros [defui]]))
 
 (defui my-component [{:keys [dispatch]} _ $] 
-  ($ :Text {:onClick #(dispatch :fire-missles)} "Hello world"))
+  (html $ [:text {:onClick #(dispatch :fire-missles)} "Fire missles!"]))
 ```
 
 The anonymous counterpart is `rehook.dom/ui`
 
-## $
+## html
 
-The `$` render fn provides Hiccup-inspired syntax for templating. 
+The `html` macro provides hiccup syntactic sugar. 
 
-Its signature looks like this: 
-`[component args? & children]`
+It takes in two arguments:
 
-* The first argument is always a component. 
-* The second (optional) argument are the component props.
-* The third (optional) vararg are any component children
+* `$` the render fn
+* `component` hiccup data 
 
-It supports component lookup in a few ways:
+### fragments
 
-* All keywords are mapped to their equivalent name in the [React Native API](https://facebook.github.io/react-native/docs/activityindicator), eg `:KeyboardAvoidingView`. For the DOM, they are mapped to their [tag name string](https://reactjs.org/docs/react-api.html#createelement), eg `:div`. 
-* Custom React Native components (eg, those imported from npm), can be referenced directly.
-* All collections map to [React fragments](https://reactjs.org/docs/react-api.html#reactfragment). Every item in a collection must be a valid React element.
+Simply return a collection of hiccup:
 
-```clojure 
-(ns example.components
-  (:require 
-    [rehook.dom :refer-macros [defui]]
-    ["imported-react-component" :refer [ImportedReactComponent]]))
-
-(defui fragment [_ _ $]
-  [($ :Text {} "I am a fragment!")
-   ($ :Text {} "I return multiple React elements")])
-
-(defui button [{:keys [dispatch]} _ $]
-  ($ :Button {:title "Fire missles" :onPress #(dispatch :fire-missles)}))
-
-(defui app [_ _ $]
-  ($ :View {:style #js {:flex 1}}
-    ($ fragment)
-    ($ button)
-    ($ ImportedReactComponent {})))
+```clojure
+(defui fragmented-ui [_ _ $]
+  (html $ [[:div {} "Div 1"] [:div {} "Div 2"]]))
 ```
 
-Note how the `$` render fn hides having to pass the `context` map to its children through clever partial function application!
+### rehook components
+
+Reference the component directly:
+
+```clojure
+(defui child [_ _ $] 
+  (html $ [:div {} "I am the child"]))
+  
+(defui parent [_ _ $]
+  (html $ [child]))
+```
+
+### reactjs components
+
+Same as rehook components. Reference the component directly:
+
+```clojure
+(require '["react-select" :as ReactSelect])
+
+(defui select [_ props $]
+  (html $ [ReactSelect props]))
+```
 
 ### Props
 
@@ -186,7 +174,7 @@ You can use the `rehook.dom.native/component-provider` fn if you directly call [
     ["react-native" :refer [AppRegistry]]))
 
 (defui app [{:keys [dispatch]} _ $]
-  ($ :Text {:onPress #(dispatch :fire-missles)} "Fire missles!"))
+  (html $ [:Text {:onPress #(dispatch :fire-missles)} "Fire missles!"]))
 
 (defn system []
   {:dispatch (fn [& _] (js/console.log "TODO: implement dispatch fn..."))})
