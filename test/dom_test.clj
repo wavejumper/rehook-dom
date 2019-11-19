@@ -14,7 +14,7 @@
 
     (is (= result
            '(:div {:ctx {:my :ctx}, :props {:props :my-props}}
-             ([:div {} "Hello world!"]))))
+             (:div {} "Hello world!"))))
 
     (is (util/rehook-component? test-component))))
 
@@ -29,6 +29,6 @@
 
     (is (= result
            '(:div {:ctx {:my :ctx}, :props {:props :my-props}}
-             ([:div {} "Hello world!"]))))
+             (:div {} "Hello world!"))))
 
     (is (util/rehook-component? test-component))))

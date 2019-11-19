@@ -6,7 +6,11 @@
   ([$ e props]
    (list $ e props))
   ([$ e props & children]
-   (apply list $ e props (map (partial ->html $) children))))
+   (apply list $ e props (map (fn [x]
+                                (if (sequential? x)
+                                  (apply ->html $ x)
+                                  x))
+                              children))))
 
 (defmacro html [$ component]
   `~(apply ->html $ component))
