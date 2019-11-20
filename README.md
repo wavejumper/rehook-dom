@@ -78,9 +78,8 @@ If another React target is added in the future, it should be as simple as adding
 
 * `context`: immutable, application context
 * `props`: any props passed to the component. This will be an untouched JS object from React.
-* `$`: (optional) the render fn
 
-It must return a valid React element.
+It must return valid hiccup.
 
 ```clojure
 (ns demo 
