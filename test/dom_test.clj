@@ -63,6 +63,9 @@
                   (when true
                     [(dom/ui [ctx _ $]
                        (dom/html $ [:div ctx "Hello world"]))])
+                  (when true
+                    [(dom/ui [ctx _]
+                       [:div ctx "Hello world 2 arity"])])
                   "---"
                   nil
                   (when true
@@ -75,6 +78,8 @@
           [:div {:my :ctx}
            [:div {:my :ctx}
             "Hello world"]
+           [:div {:my :ctx}
+            "Hello world 2 arity"]
            "---"
            "a child"
            [:div {:my :ctx}
