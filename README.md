@@ -129,24 +129,9 @@ Same as rehook components. Reference the component directly:
 ```clojure
 (require '["react-select" :as ReactSelect])
 
-(defui select [_ props $]
-  (html $ [ReactSelect props]))
+(defui select [_ props]
+  [ReactSelect props])
 ```
-
-### macro tips 
-
-The `html` macro will try to do as much of the computation at compile time.
-
-If you can, aim to render literal hiccup components where possible:
-
-```clojure
-;; okish
-(html $ (if some-var? [:div {} "Found"] [:div {} "Not found"]))
-
-;; betterer
-(if some-var (html $ [:div {} "Found"]) (html $ [:div {} "Not found"])))
-```
-
 ### without the macro
 
 You can opt-out of the `html` macro by passing a third argument (the render fn) to `defui`:
