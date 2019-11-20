@@ -132,7 +132,7 @@ Same as rehook components. Reference the component directly:
 (defui select [_ props]
   [ReactSelect props])
 ```
-### without the macro
+### hiccup-free
 
 You can opt-out of the `html` macro by passing a third argument (the render fn) to `defui`:
 
