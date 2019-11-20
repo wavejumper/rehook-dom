@@ -74,7 +74,7 @@ If another React target is added in the future, it should be as simple as adding
 
 `rehook.dom/defui` is a macro used to define `rehook` components. This macro is only syntactic sugar, as all `rehook` components are cljs fns.
 
-`defui` takes in three arguments:
+`defui` takes in two arguments:
 
 * `context`: immutable, application context
 * `props`: any props passed to the component. This will be an untouched JS object from React.
