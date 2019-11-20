@@ -2,7 +2,9 @@
 
 (defn eval-hiccup
   ([$ e]
-   ($ e))
+   (if (vector? e)
+     (apply eval-hiccup $ e)
+     ($ e)))
   ([$ e props]
    ($ e props))
   ([$ e props & children]
@@ -26,7 +28,7 @@
                                    (or (nil? x) (string? x) (number? x))
                                    x
 
-                                   :else `(apply eval-hiccup ~$ ~x)))
+                                   :else `(eval-hiccup ~$ ~x)))
                               children))))
 
 #?(:clj

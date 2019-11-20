@@ -19,6 +19,9 @@
 
 (deftest embedded-symbol
   (let [embedded-child [:div {} nil "foo"]]
+    (is (= (dom/html list [:div {} (pr-str "foo")])
+           '(:div {} ("\"foo\""))))
+
     (is (= (dom/html list [:div {} embedded-child])
            '(:div {} (:div {} "foo"))))))
 
