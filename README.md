@@ -122,6 +122,19 @@ Same as rehook components. Reference the component directly:
 (defui select [_ props]
   [ReactSelect props])
 ```
+
+### reagent components 
+
+```clojure
+(require '[reagent.core :as r])
+
+(defn my-reagent-component []
+  [:div {} "I am a reagent component, I guess..."])
+
+(defui my-rehook-component [_ _]
+  [(r/reactify-component my-reagent-component)])
+```
+
 ### hiccup-free
 
 You can opt-out of the `html` macro by passing a third argument (the render fn) to `defui`:
