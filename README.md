@@ -10,7 +10,7 @@ React component micro-library for Clojurescript enabling data-driven architectur
 ```clojure
 (ns demo 
   (:require 
-    [rehook.dom :refer-macros [defui html]]
+    [rehook.dom :refer-macros [defui]]
     [react.dom.browser :as dom.browser]
     ["react-dom" :as react-dom]))
 
@@ -19,9 +19,8 @@ React component micro-library for Clojurescript enabling data-driven architectur
 
 (defui my-component 
   [{:keys [dispatch]} ;; <-- context map from bootstrap fn
-   props ;; <-- any props passed from parent component
-   $] ;; <-- the render fn
-  (html $ [:div {:onClick #(dispatch :fire-missles)} "Fire missiles"]))
+   props] ;; <-- any props passed from parent component
+  [:div {:onClick #(dispatch :fire-missles)} "Fire missiles"])
 
 (react-dom/render 
   (dom.browser/bootstrap 
@@ -54,7 +53,7 @@ This is generally a trade-off between convenience and 'pureness'.
 
 However `rehook-dom` gives you both! 
 
-Via clever partial function application, the resulting DSL means you don't have to think about passing around a context map at all!
+Via clever partial function application (and macro wizardry), the resulting DSL means you don't have to think about passing around a context map at all!
 
 And because all `rehook-dom` components are plain Cljs fns where all inputs are arguments, you can easily test and reason about your code! Pure functions and all that.
 
@@ -79,7 +78,7 @@ If another React target is added in the future, it should be as simple as adding
 
 * `context`: immutable, application context
 * `props`: any props passed to the component. This will be an untouched JS object from React.
-* `$`: the render fn
+* `$`: (optional) the render fn
 
 It must return a valid React element.
 
@@ -87,8 +86,8 @@ It must return a valid React element.
 (ns demo 
   (:require [rehook.dom :refer-macros [defui]]))
 
-(defui my-component [{:keys [dispatch]} _ $] 
-  (html $ [:text {:onClick #(dispatch :fire-missles)} "Fire missles!"]))
+(defui my-component [{:keys [dispatch]} _] 
+  [:text {:onClick #(dispatch :fire-missles)} "Fire missles!"])
 ```
 
 The anonymous counterpart is `rehook.dom/ui`
@@ -107,8 +106,8 @@ It takes in two arguments:
 Simply return a collection of hiccup:
 
 ```clojure
-(defui fragmented-ui [_ _ $]
-  (html $ [[:div {} "Div 1"] [:div {} "Div 2"]]))
+(defui fragmented-ui [_ _]
+  [[:div {} "Div 1"] [:div {} "Div 2"]])
 ```
 
 ### rehook components
@@ -116,11 +115,11 @@ Simply return a collection of hiccup:
 Reference the component directly:
 
 ```clojure
-(defui child [_ _ $] 
-  (html $ [:div {} "I am the child"]))
+(defui child [_ _] 
+  [:div {} "I am the child"])
   
-(defui parent [_ _ $]
-  (html $ [child]))
+(defui parent [_ _]
+  [child])
 ```
 
 ### reactjs components
@@ -150,11 +149,11 @@ If you can, aim to render literal hiccup components where possible:
 
 ### without the macro
 
-You can opt-out of the macro like so:
+You can opt-out of the `html` macro by passing a third argument (the render fn) to `defui`:
 
 ```clojure
 (defui no-html-macro [_ _ $]
-  (html $ :div {} "Macro free"))
+  ($ :div {} "rehook-dom without hiccup!"))
 ```
 
 Because the `$` render fn is passed into every rehook component you can overload it -- or better yet create your own abstract macros!
@@ -200,8 +199,8 @@ You can use the `rehook.dom.native/component-provider` fn if you directly call [
     [rehook.dom.native :as dom]
     ["react-native" :refer [AppRegistry]]))
 
-(defui app [{:keys [dispatch]} _ $]
-  (html $ [:Text {:onPress #(dispatch :fire-missles)} "Fire missles!"]))
+(defui app [{:keys [dispatch]} _]
+  [:Text {:onPress #(dispatch :fire-missles)} "Fire missles!"])
 
 (defn system []
   {:dispatch (fn [& _] (js/console.log "TODO: implement dispatch fn..."))})
