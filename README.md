@@ -64,7 +64,7 @@ And because all `rehook-dom` components are plain Cljs fns where all inputs are 
 
 Easy interop means you lose some Clojure idioms, but it keeps the API surface lean and obvious. 
 
-#### react-dom and react-native support
+#### server, react-dom and react-native support
 
 There shouldn't be any difference in API, except how you render or register your root component. 
 
