@@ -92,15 +92,6 @@ It must return a valid React element.
 
 The anonymous counterpart is `rehook.dom/ui`
 
-## html
-
-The `html` macro provides hiccup syntactic sugar. 
-
-It takes in two arguments:
-
-* `$` the render fn
-* `component` hiccup data 
-
 ### fragments
 
 Simply return a collection of hiccup:
