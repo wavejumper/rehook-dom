@@ -3,7 +3,7 @@
 [![Clojars Project](https://img.shields.io/clojars/v/wavejumper/rehook-dom.svg)](https://clojars.org/wavejumper/rehook-dom)
 [![CircleCI](https://circleci.com/gh/wavejumper/rehook-dom.svg?style=svg)](https://circleci.com/gh/wavejumper/rehook-dom)
 
-React component micro-library for Clojurescript enabling data-driven architecture
+React component DSL enabling data-driven architecture
 
 #### Hello world
 
