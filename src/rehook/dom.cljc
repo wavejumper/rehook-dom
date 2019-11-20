@@ -37,28 +37,51 @@
 
 #?(:clj
    (defmacro defui
-     [name [ctx props $] & body]
-     `(def ~name
-        ^{:rehook/component true
-          :rehook/name      ~(str name)}
-        (fn [ctx# $#]
-          (let [~ctx ctx#
-                ~$ $#]
-            (fn ~(gensym name) [props#]
-              (let [~props props#]
-                ~@body)))))))
+     [name [ctx props $?] & body]
+     (if $?
+       `(def ~name
+          ^{:rehook/component true
+            :rehook/name      ~(str name)}
+          (fn [ctx# $#]
+            (let [~ctx ctx#
+                  ~$? $#]
+              (fn ~(gensym name) [props#]
+                (let [~props props#]
+                  ~@body)))))
+
+       `(def ~name
+          ^{:rehook/component true
+            :rehook/name      ~(str name)}
+          (fn [ctx# $#]
+            (let [~ctx ctx#
+                  ~'&$ $#]
+              (fn ~(gensym name) [props#]
+                (let [~props props#]
+                  (html ~'&$ ~@body)))))))))
 
 #?(:clj
    (defmacro ui
-     [[ctx props $] & body]
-     (let [id (gensym "ui")]
-       `(with-meta
-          (fn ~id [ctx# $#]
-            (let [~ctx ctx#
-                  ~$ $#]
-              (fn [props#]
-                (let [~props props#]
-                  ~@body))))
-          {:rehook/component true
-           :rehook/name      ~(str id)}))))
+     [[ctx props $?] & body]
+     (if $?
+       (let [id (gensym "ui")]
+         `(with-meta
+           (fn ~id [ctx# $#]
+             (let [~ctx ctx#
+                   ~$? $#]
+               (fn [props#]
+                 (let [~props props#]
+                   ~@body))))
+           {:rehook/component true
+            :rehook/name      ~(str id)}))
+
+       (let [id (gensym "ui")]
+         `(with-meta
+           (fn ~id [ctx# $#]
+             (let [~ctx ctx#
+                   ~'&$ $#]
+               (fn [props#]
+                 (let [~props props#]
+                   (html ~'&$ ~@body)))))
+           {:rehook/component true
+            :rehook/name      ~(str id)})))))
 
