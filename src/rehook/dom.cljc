@@ -77,15 +77,16 @@
                       ~@body))))))
 
        (do (s/assert* ::defui [name [ctx props] body])
-           `(def ~name
-              ^{:rehook/component true
-                :rehook/name      ~(str name)}
-              (fn ~(gensym name) [ctx# $#]
-                (let [~ctx ctx#
-                      ~'&$ $#]
-                  (fn ~(gensym name) [props#]
-                    (let [~props props#]
-                      (html ~'&$ ~@body))))))))))
+           (let [$ (gensym '$)]
+             `(def ~name
+                ^{:rehook/component true
+                  :rehook/name      ~(str name)}
+                (fn ~(gensym name) [ctx# $#]
+                  (let [~ctx ctx#
+                        ~$ $#]
+                    (fn ~(gensym name) [props#]
+                      (let [~props props#]
+                        (html ~$ ~@body)))))))))))
 
 #?(:clj
    (defmacro ui
@@ -103,15 +104,16 @@
            {:rehook/component true
             :rehook/name      ~(str id)}))
 
-       (let [id (gensym "ui")]
+       (let [id (gensym "ui")
+             $  (gensym '$)]
          (s/assert* ::ui [[ctx props] body])
          `(with-meta
            (fn ~id [ctx# $#]
              (let [~ctx ctx#
-                   ~'&$ $#]
+                   ~$ $#]
                (fn ~(gensym id) [props#]
                  (let [~props props#]
-                   (html ~'&$ ~@body)))))
+                   (html ~$ ~@body)))))
            {:rehook/component true
             :rehook/name      ~(str id)})))))
 
