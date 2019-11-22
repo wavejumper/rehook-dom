@@ -17,6 +17,15 @@
   [:div {:ctx ctx :props props}
    [:div {} "Hello world!"]])
 
+(dom/defui test-component-with-side-effect [{:keys [a]} _]
+  (reset! a ::evaled)
+  [:div {} "Hello world"])
+
+(deftest defui--check-effects
+  (let [a (atom nil)]
+    ((test-component-with-side-effect {:a a} list) {})
+    (is (= @a ::evaled))))
+
 (deftest embedded-symbol
   (let [embedded-child [:div {} nil "foo"]]
     (is (= (dom/html list [:div {} (pr-str "foo")])
